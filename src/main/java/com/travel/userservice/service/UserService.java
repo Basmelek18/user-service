@@ -32,6 +32,8 @@ public class UserService {
         user.setUsername(newUserRequest.getUsername());
         user.setPassword(passwordEncoder.encode(newUserRequest.getPassword()));
         user.setTelegramId(newUserRequest.getTelegramId());
+        user.setFirstName(newUserRequest.getFirstName());
+        user.setLastName(newUserRequest.getLastName());
         userRepository.save(user);
         return UserMapper.toDTO(user);
     }
