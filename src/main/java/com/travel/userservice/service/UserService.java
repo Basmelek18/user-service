@@ -1,6 +1,7 @@
 package com.travel.userservice.service;
 
 import com.travel.userservice.dto.NewUserRequest;
+import com.travel.userservice.dto.ShortUserDTO;
 import com.travel.userservice.dto.UserDTO;
 import com.travel.userservice.dto.UserMapper;
 import com.travel.userservice.model.User;
@@ -25,7 +26,7 @@ public class UserService {
 
         User exceptionUser = userRepository.findByUsername(username);
         if (exceptionUser != null) {
-            throw new UsernameNotFoundException("User not found");
+            throw new UsernameNotFoundException("User already exits");
         }
         User user = new User();
         user.setUsername(newUserRequest.getUsername());
@@ -33,5 +34,14 @@ public class UserService {
         user.setTelegramId(newUserRequest.getTelegramId());
         userRepository.save(user);
         return UserMapper.toDTO(user);
+    }
+
+    @Transactional
+    public ShortUserDTO getUser(long id) {
+        User user = userRepository.findById(id);
+        if (user == null) {
+            throw new UsernameNotFoundException("User doesn't exit");
+        }
+        return UserMapper.toShortDTO(user);
     }
 }

@@ -5,9 +5,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UserDTO {
+public class ShortUserDTO {
     private String username;
     private String firstName;
     private String lastName;
-    private String telegramId;
 }

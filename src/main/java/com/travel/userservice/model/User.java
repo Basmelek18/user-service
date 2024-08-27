@@ -16,6 +16,10 @@ public class User {
     private long id;
     @Column(name = "username")
     private String username;
+    @Column(name = "username")
+    private String firstName;
+    @Column(name = "username")
+    private String lastName;
     @Column(name = "telegram_id", unique = true)
     private String telegramId;
     @Column(name = "password")
