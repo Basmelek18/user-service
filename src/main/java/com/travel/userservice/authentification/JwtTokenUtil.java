@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.function.Function;
 
@@ -20,7 +22,9 @@ public class JwtTokenUtil {
     public String generateToken(String username) {
         return Jwts.builder()
                 .setSubject(username)
+                // Можно просто new Date()
                 .setIssuedAt(new Date(System.currentTimeMillis()))
+                // 1000 * 60 * 60 * 24 * 14 нужно вынести в конфиг файл
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 14)) // 14 days
                 .signWith(SignatureAlgorithm.HS256, secret.getBytes())
                 .compact();
@@ -50,6 +54,7 @@ public class JwtTokenUtil {
     }
 
     // Валидация токена
+    // А здесь вообще проверяется подпись зашитая в токене?
     public Boolean validateToken(String token, String username) {
         final String extractedUsername = extractUsername(token);
         return (extractedUsername.equals(username) && !isTokenExpired(token));
