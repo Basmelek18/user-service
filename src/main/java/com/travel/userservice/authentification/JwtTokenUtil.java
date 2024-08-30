@@ -6,7 +6,6 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.function.Function;
 
@@ -14,14 +13,15 @@ import java.util.function.Function;
 public class JwtTokenUtil {
     @Value("${SECRET_KEY}")
     private String secret;
-
+    @Value("${TOKEN_TIME}")
+    private int tokenExp;
 
     // token generation
     public String generateToken(String username) {
         return Jwts.builder()
                 .setSubject(username)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 14)) // 14 days
+                .setExpiration(new Date(System.currentTimeMillis() + tokenExp)) // 14 days
                 .signWith(SignatureAlgorithm.HS256, secret.getBytes())
                 .compact();
     }

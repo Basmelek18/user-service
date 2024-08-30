@@ -1,6 +1,5 @@
 package com.travel.userservice.config;
 
-// import com.travel.userservice.authentification.JwtRequestFilter;
 import com.travel.userservice.authentification.JwtRequestFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
