@@ -5,6 +5,7 @@ import com.travel.userservice.model.User;
 public class UserMapper {
     public static UserDTO toDTO(User user) {
         UserDTO userDTO = new UserDTO();
+        userDTO.setUsername(user.getUsername());
         userDTO.setFirstName(user.getFirstName());
         userDTO.setLastName(user.getLastName());
         userDTO.setTelegramId(user.getTelegramId());

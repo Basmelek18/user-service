@@ -35,8 +35,7 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable) // Отключение CSRF для упрощения тестирования
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/registration", "/auth").permitAll() // Разрешить доступ к /registration и /auth без аутентификации
-                        .requestMatchers("/user/{user_id}").authenticated() // Требовать аутентификацию для /user/{user_id}
+                        .requestMatchers("/registration", "/auth").permitAll()
                         .anyRequest().authenticated() // Все остальные запросы также требуют аутентификации
                 )
                 .sessionManagement(session -> session
