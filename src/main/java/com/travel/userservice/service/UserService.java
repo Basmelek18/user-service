@@ -1,5 +1,6 @@
 package com.travel.userservice.service;
 
+import com.travel.userservice.authentification.JwtTokenUtil;
 import com.travel.userservice.dto.NewUserRequest;
 import com.travel.userservice.dto.ShortUserDTO;
 import com.travel.userservice.dto.UserDTO;
@@ -45,5 +46,27 @@ public class UserService {
             throw new UsernameNotFoundException("User doesn't exit");
         }
         return UserMapper.toShortDTO(user);
+    }
+
+    @Transactional
+    public UserDTO getMe(String username) {
+        User user = userRepository.findByUsername(username);
+        if (user == null) {
+            throw new UsernameNotFoundException("User doesn't exit");
+        }
+        return UserMapper.toDTO(user);
+    }
+
+    @Transactional
+    public UserDTO updateUser(UserDTO userDTO) {
+        User user = userRepository.findByUsername(userDTO.getUsername());
+        if (user == null) {
+            throw new UsernameNotFoundException("User doesn't exit");
+        }
+        user.setFirstName(userDTO.getFirstName());
+        user.setLastName(userDTO.getLastName());
+        user.setTelegramId(userDTO.getTelegramId());
+        userRepository.save(user);
+        return UserMapper.toDTO(user);
     }
 }
