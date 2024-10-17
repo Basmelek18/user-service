@@ -1,10 +1,7 @@
 package com.travel.userservice.service;
 
-import com.travel.userservice.authentification.JwtTokenUtil;
-import com.travel.userservice.dto.NewUserRequest;
-import com.travel.userservice.dto.ShortUserDTO;
-import com.travel.userservice.dto.UserDTO;
-import com.travel.userservice.dto.UserMapper;
+import com.travel.userservice.dto.*;
+import com.travel.userservice.exception.NotFoundException;
 import com.travel.userservice.model.User;
 import com.travel.userservice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -43,7 +40,7 @@ public class UserService {
     public ShortUserDTO getUser(long id) {
         User user = userRepository.findById(id);
         if (user == null) {
-            throw new UsernameNotFoundException("User doesn't exit");
+            throw new NotFoundException("User doesn't exit");
         }
         return UserMapper.toShortDTO(user);
     }
@@ -52,21 +49,32 @@ public class UserService {
     public UserDTO getMe(String username) {
         User user = userRepository.findByUsername(username);
         if (user == null) {
-            throw new UsernameNotFoundException("User doesn't exit");
+            throw new NotFoundException("User doesn't exit");
         }
         return UserMapper.toDTO(user);
     }
 
     @Transactional
-    public UserDTO updateUser(UserDTO userDTO) {
-        User user = userRepository.findByUsername(userDTO.getUsername());
+    public UserDTO updateUser(UserInfoDTO userInfoDTO, String currentUsername) {
+        User user = userRepository.findByUsername(currentUsername);
         if (user == null) {
-            throw new UsernameNotFoundException("User doesn't exit");
+            throw new NotFoundException("User doesn't exit");
         }
-        user.setFirstName(userDTO.getFirstName());
-        user.setLastName(userDTO.getLastName());
-        user.setTelegramId(userDTO.getTelegramId());
+        user.setFirstName(userInfoDTO.getFirstName());
+        user.setLastName(userInfoDTO.getLastName());
+        user.setTelegramId(userInfoDTO.getTelegramId());
         userRepository.save(user);
         return UserMapper.toDTO(user);
     }
+
+    @Transactional
+    public boolean deleteUser(String currentUsername) {
+        long id = userRepository.findByUsername(currentUsername).getId();
+        if (userRepository.existsById(id)) {
+            userRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
+
 }

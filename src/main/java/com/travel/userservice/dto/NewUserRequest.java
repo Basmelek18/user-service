@@ -10,6 +10,7 @@ import lombok.Setter;
 @Setter
 @RequiredArgsConstructor
 public class NewUserRequest {
+    @JsonProperty("username")
     private final String username;
     @JsonProperty("first_name")
     private final String firstName;

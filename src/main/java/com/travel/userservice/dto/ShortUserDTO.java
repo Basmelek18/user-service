@@ -11,6 +11,7 @@ import lombok.Setter;
 @Builder
 @RequiredArgsConstructor
 public class ShortUserDTO {
+    @JsonProperty("username")
     private final String username;
     @JsonProperty("first_name")
     private final String firstName;

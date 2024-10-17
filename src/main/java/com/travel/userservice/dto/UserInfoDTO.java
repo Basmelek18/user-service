@@ -6,13 +6,12 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
+
 @Getter
 @Setter
 @Builder
 @RequiredArgsConstructor
-public class UserDTO {
-    @JsonProperty("username")
-    private final String username;
+public class UserInfoDTO {
     @JsonProperty("first_name")
     private final String firstName;
     @JsonProperty("last_name")

@@ -1,11 +1,13 @@
 package com.travel.userservice.controller;
 
-import com.travel.userservice.authentification.JwtTokenUtil;
 import com.travel.userservice.dto.ShortUserDTO;
 import com.travel.userservice.dto.UserDTO;
+import com.travel.userservice.dto.UserInfoDTO;
 import com.travel.userservice.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -13,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(path="/user")
 public class UserController {
     private final UserService userService;
-    private final JwtTokenUtil jwtTokenUtil;
 
     @GetMapping("/{userId}")
     @ResponseStatus(HttpStatus.OK)
@@ -23,19 +24,24 @@ public class UserController {
 
     @GetMapping("/me")
     @ResponseStatus(HttpStatus.OK)
-    public UserDTO getMe(@RequestHeader("Authorization") String authorizationHeader) {
-        String token = null;
-        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-            token = authorizationHeader.substring(7);
-        }
-        return userService.getMe(jwtTokenUtil.extractUsername(token));
+    public UserDTO getMe(Authentication authentication) {
+        return userService.getMe(authentication.getName());
     }
 
     @PostMapping("/me")
     @ResponseStatus(HttpStatus.CREATED)
-    public UserDTO updateMe(@RequestBody UserDTO userDTO) {
-        return userService.updateUser(userDTO);
+    public UserDTO updateMe(@RequestBody UserInfoDTO userInfoDTO, Authentication authentication) {
+        return userService.updateUser(userInfoDTO, authentication.getName());
     }
 
-
+    @DeleteMapping("/me")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<Void> deleteUser(Authentication authentication) {
+        boolean isDeleted = userService.deleteUser(authentication.getName());
+        if (isDeleted) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }
