@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final UserEventProducer userEventProducer;
 
     @Transactional
     public UserDTO createUser(NewUserRequest newUserRequest) {
@@ -33,6 +34,7 @@ public class UserService {
         user.setFirstName(newUserRequest.getFirstName());
         user.setLastName(newUserRequest.getLastName());
         userRepository.save(user);
+        userEventProducer.sendUserEvent(new UserEvent(username, "created"));
         return UserMapper.toDTO(user);
     }
 
@@ -72,6 +74,7 @@ public class UserService {
         long id = userRepository.findByUsername(currentUsername).getId();
         if (userRepository.existsById(id)) {
             userRepository.deleteById(id);
+            userEventProducer.sendUserEvent(new UserEvent(currentUsername, "deleted"));
             return true;
         }
         return false;
