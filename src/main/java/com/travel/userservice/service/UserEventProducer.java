@@ -15,8 +15,8 @@ public class UserEventProducer {
     private final KafkaTemplate<String, String> kafkaTemplate;
     private final ObjectMapper objectMapper;
 
-    @Value("{kafka.topic}")
-    private final String topic;
+    @Value("${kafka.topic}")
+    private String topic;
 
     public void sendUserEvent(UserEvent userEvent) {
         try {
