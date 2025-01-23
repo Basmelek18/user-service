@@ -5,8 +5,6 @@ import com.travel.userservice.dto.AuthRequest;
 import com.travel.userservice.dto.JwtResponce;
 import com.travel.userservice.service.CustomUserDetailService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,10 +21,10 @@ public class AuthController {
     @PostMapping()
     public JwtResponce createAuthToken(@RequestBody AuthRequest authRequest) throws Exception{
         authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword())
+                new UsernamePasswordAuthenticationToken(authRequest.getLogin(), authRequest.getPassword())
         );
 
-        final UserDetails userDetails = customUserDetailService.loadUserByUsername(authRequest.getUsername());
+        final UserDetails userDetails = customUserDetailService.loadUserByUsername(authRequest.getLogin());
         return new JwtResponce(jwtTokenUtil.generateToken(userDetails.getUsername()));
     }
 }

@@ -16,8 +16,8 @@ public class User {
     private long id;
     @Column(name = "username", unique = true)
     private String username;
-    @Column(name = "telegram_id", unique = true)
-    private String telegramId;
+    @Column(name = "email", unique = true)
+    private String email;
     @Column(name = "password")
     private String password;
     @Column(name = "first_name")

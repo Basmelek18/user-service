@@ -30,7 +30,7 @@ public class UserService {
         User user = new User();
         user.setUsername(newUserRequest.getUsername());
         user.setPassword(passwordEncoder.encode(newUserRequest.getPassword()));
-        user.setTelegramId(newUserRequest.getTelegramId());
+        user.setEmail(newUserRequest.getEmail());
         user.setFirstName(newUserRequest.getFirstName());
         user.setLastName(newUserRequest.getLastName());
         userRepository.save(user);
@@ -64,7 +64,7 @@ public class UserService {
         }
         user.setFirstName(userInfoDTO.getFirstName());
         user.setLastName(userInfoDTO.getLastName());
-        user.setTelegramId(userInfoDTO.getTelegramId());
+        user.setEmail(userInfoDTO.getEmail());
         userRepository.save(user);
         return UserMapper.toDTO(user);
     }

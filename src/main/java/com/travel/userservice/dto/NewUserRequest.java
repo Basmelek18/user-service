@@ -16,7 +16,7 @@ public class NewUserRequest {
     private final String firstName;
     @JsonProperty("last_name")
     private final String lastName;
-    @JsonProperty("telegram_id")
-    private final String telegramId;
+    @JsonProperty("email")
+    private final String email;
     private final String password;
 }

@@ -8,7 +8,7 @@ public class UserMapper {
                 .username(user.getUsername())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
-                .telegramId(user.getTelegramId())
+                .email(user.getEmail())
                 .build();
     }
 

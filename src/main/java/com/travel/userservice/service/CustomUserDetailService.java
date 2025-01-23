@@ -31,4 +31,20 @@ public class CustomUserDetailService implements UserDetailsService {
                 authorities
         );
     }
+
+    public UserDetails loadUserByEmail(String email) throws UsernameNotFoundException {
+        User user = userRepository.findByEmail(email);
+        List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("User"));
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found");
+        }
+        return new org.springframework.security.core.userdetails.User(
+                user.getEmail(),
+                user.getPassword(),
+                true, true, true, true,
+                authorities
+        );
+    }
+
+
 }
