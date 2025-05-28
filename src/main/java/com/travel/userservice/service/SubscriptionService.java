@@ -22,6 +22,7 @@ public class SubscriptionService {
     private final SubscriptionRepository subscriptionRepository;
     private final UserRepository userRepository;
 
+
     @Transactional
     public void subscribe(long id, String currentUsername) {
         User subscriber = userRepository.findByUsername(currentUsername);
@@ -65,11 +66,40 @@ public class SubscriptionService {
         Subscription subscription = subscriptionRepository
                 .findById(subId)
                 .orElseThrow(() -> new NotFoundException("Subscription not found"));
-        if (Objects.equals(subscription.getSubscribedTo().getUsername(), currentUsername)) {
+        if (!Objects.equals(subscription.getSubscribedTo().getUsername(), currentUsername)) {
+            throw new NotFoundException("Subscription not found");
+        }
+        if (subscription.getStatus() == SubscriptionStatus.PENDING) {
             subscription.setStatus(SubscriptionStatus.ACCEPTED);
             subscriptionRepository.save(subscription);
-        } else {
+        }
+    }
+
+    @Transactional
+    public void rejectSubscription(long subId, String currentUsername) {
+        Subscription subscription = subscriptionRepository
+                .findById(subId)
+                .orElseThrow(() -> new NotFoundException("Subscription not found"));
+        if (!Objects.equals(subscription.getSubscribedTo().getUsername(), currentUsername)) {
             throw new NotFoundException("Subscription not found");
+        }
+        if (subscription.getStatus() == SubscriptionStatus.PENDING) {
+            subscription.setStatus(SubscriptionStatus.REJECTED);
+            subscriptionRepository.save(subscription);
+        }
+    }
+
+    @Transactional
+    public void deleteSubscription(long subId, String currentUsername) {
+        Subscription subscription = subscriptionRepository
+                .findById(subId)
+                .orElseThrow(() -> new NotFoundException("Subscription not found"));
+        if (!Objects.equals(subscription.getSubscribedTo().getUsername(), currentUsername)) {
+            throw new NotFoundException("Subscription not found");
+        }
+        if (subscription.getStatus() == SubscriptionStatus.ACCEPTED) {
+            subscription.setStatus(SubscriptionStatus.UNSUBSCRIBED);
+            subscriptionRepository.save(subscription);
         }
     }
 }
