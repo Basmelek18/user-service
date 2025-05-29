@@ -12,5 +12,6 @@ public interface SubscriptionRepository extends JpaRepository<Subscription, Long
     List<Subscription> findBySubscribedTo(User subscribedTo);
     boolean existsBySubscriberAndSubscribedToAndStatus(User subscriber, User subscribedTo, SubscriptionStatus status);
     Subscription findBySubscriberAndSubscribedTo(User subscriber, User subscribedTo);
-
+    Subscription findByIdAndSubscriber(long id, User subscriber);
+    Subscription findByIdAndSubscribedTo(long id, User subscribedTo);
 }

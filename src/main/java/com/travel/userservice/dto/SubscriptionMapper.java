@@ -14,4 +14,6 @@ public class SubscriptionMapper {
                 .createdAt(subscription.getCreatedAt())
                 .build();
     }
+
+
 }

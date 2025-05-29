@@ -1,6 +1,9 @@
 package com.travel.userservice.service;
 
+import com.travel.userservice.dto.SubscriptionDTO;
+import com.travel.userservice.dto.SubscriptionMapper;
 import com.travel.userservice.enums.SubscriptionStatus;
+import com.travel.userservice.exception.AccessException;
 import com.travel.userservice.exception.AlreadyExistException;
 import com.travel.userservice.exception.NotFoundException;
 import com.travel.userservice.exception.SubscriptionToYourselfException;
@@ -13,7 +16,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +27,35 @@ public class SubscriptionService {
     private final SubscriptionRepository subscriptionRepository;
     private final UserRepository userRepository;
 
+    @Transactional
+    public SubscriptionDTO getSubscription(long subId, String currentUsername) {
+        User currentUser = userRepository.findByUsername(currentUsername);
+        Subscription subscription = subscriptionRepository
+                .findById(subId)
+                .orElseThrow(() -> new NotFoundException("Subscription not found"));
+        if (subscription.getSubscriber() != currentUser & subscription.getSubscribedTo() != currentUser) {
+            throw new AccessException("Subscription or user doesn't have access");
+        }
+        return SubscriptionMapper.toSubscriptionDTO(subscription);
+    }
+
+    @Transactional
+    public List<SubscriptionDTO> getMySubscriptions(String currentUsername) {
+        User currentUser = userRepository.findByUsername(currentUsername);
+        return subscriptionRepository.findBySubscriber(currentUser)
+                .stream()
+                .map(SubscriptionMapper::toSubscriptionDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public List<SubscriptionDTO> getMySubscribers(String currentUsername) {
+        User currentUser = userRepository.findByUsername(currentUsername);
+        return subscriptionRepository.findBySubscribedTo(currentUser)
+                .stream()
+                .map(SubscriptionMapper::toSubscriptionDTO)
+                .collect(Collectors.toList());
+    }
 
     @Transactional
     public void subscribe(long id, String currentUsername) {
