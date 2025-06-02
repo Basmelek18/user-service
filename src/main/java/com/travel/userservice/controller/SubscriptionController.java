@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(path="/subscription")
+@RequestMapping(path="/subscriptions")
 public class SubscriptionController {
     private final SubscriptionService subscriptionService;
 
