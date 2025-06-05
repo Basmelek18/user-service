@@ -23,7 +23,7 @@ public class SubscriptionDTO {
 
     @JsonProperty("subscribed_to_id")
     private final Long subscribedToId;
-    @JsonProperty("subscriber_username")
+    @JsonProperty("subscribed_to_username")
     private final String subscribedToUsername;
 
     @JsonProperty("status")

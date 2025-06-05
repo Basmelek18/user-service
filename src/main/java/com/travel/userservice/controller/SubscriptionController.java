@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 public class SubscriptionController {
     private final SubscriptionService subscriptionService;
 
-    @PostMapping("/{subId}/")
+    @GetMapping("/{subId}/")
     @ResponseStatus(HttpStatus.CREATED)
     public SubscriptionDTO getSubscription(
             @PathVariable long subId,
