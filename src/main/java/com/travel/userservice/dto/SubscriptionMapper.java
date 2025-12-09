@@ -1,11 +1,11 @@
 package com.travel.userservice.dto;
 
 import com.travel.userservice.model.Subscription;
-import com.travel.userservice.model.User;
 
 public class SubscriptionMapper {
     public static SubscriptionDTO toSubscriptionDTO(Subscription subscription) {
         return SubscriptionDTO.builder()
+                .id(subscription.getId())
                 .subscriberId(subscription.getSubscriber().getId())
                 .subscriberUsername(subscription.getSubscriber().getUsername())
                 .subscribedToId(subscription.getSubscribedTo().getId())
